@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { User as SupabaseUser, Session } from '@supabase/supabase-js';
@@ -29,7 +30,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up Supabase session listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
@@ -38,13 +38,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
 
-    // Check for existing token
     const token = localStorage.getItem('token');
     if (token) {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       loadUser();
     } else {
-      // Initial Supabase session check
       supabase.auth.getSession().then(({ data: { session } }) => {
         setSession(session);
         setUser(session?.user ?? null);
@@ -69,47 +67,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signIn = async (email: string, password: string) => {
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      return data;
-    } catch {
-      // Fallback to regular auth
-      const { token, user } = await authService.login({ email, password });
-      localStorage.setItem('token', token);
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setUser(user);
-    }
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) throw error;
+    setUser(data.user);
+    setSession(data.session);
   };
 
   const signUp = async (email: string, password: string, name: string) => {
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: name }
-        }
-      });
-      if (error) throw error;
-      if (data.user) {
-        await supabase.from('profiles').insert({
-          id: data.user.id,
-          full_name: name,
-          email: email
-        });
-      }
-    } catch {
-      // Fallback to regular auth
-      await authService.register({ email, password, name });
-    }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name },
+      },
+    });
+    if (error) throw error;
+    setUser(data.user);
+    setSession(data.session);
   };
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    localStorage.removeItem('token');
-    delete api.defaults.headers.common['Authorization'];
     setUser(null);
+    setSession(null);
+    localStorage.removeItem('token');
   };
 
   const googleSignIn = async () => {
@@ -153,3 +137,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+export default AuthContext;

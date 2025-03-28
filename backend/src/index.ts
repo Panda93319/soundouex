@@ -7,7 +7,7 @@ import { initDb } from './db';
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:8080', // Your frontend origin
+  origin: 'http://0.0.0.0:8080', // Your frontend origin
   credentials: true, // If you're using cookies/sessions
   optionsSuccessStatus: 200 // For legacy browser support
 };
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+  res.header('Access-Control-Allow-Origin', 'http://0.0.0.0:8080');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header(
     'Access-Control-Allow-Headers',
@@ -35,7 +35,7 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 // Initialize database before starting the server
 initDb()
   .then(() => {
-    app.listen(config.port, () => {
+    app.listen(config.port, '0.0.0.0', () => {
       console.log(`Server running on port ${config.port}`);
     });
   })
@@ -43,22 +43,3 @@ initDb()
     console.error('Failed to initialize database:', error);
     process.exit(1);
   });
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-app.use(cors());
-app.use(express.json());
-
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});

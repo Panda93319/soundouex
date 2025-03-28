@@ -10,3 +10,19 @@ run = ["sh", "-c", "npm run dev"]
 [[ports]]
 localPort = 8080
 externalPort = 80
+
+[workflows]
+runButton = "Dev"
+
+[[workflows.workflow]]
+name = "Dev"
+author = 40936314
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && npm run dev"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"

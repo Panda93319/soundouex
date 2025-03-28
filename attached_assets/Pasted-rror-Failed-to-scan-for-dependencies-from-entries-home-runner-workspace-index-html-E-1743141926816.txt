@@ -1,0 +1,78 @@
+rror:   Failed to scan for dependencies from entries:
+  /home/runner/workspace/index.html
+
+  ✘ [ERROR] The symbol "AuthContext" has already been declared
+
+    src/context/AuthContext.tsx:83:6:
+      83 │ const AuthContext = createContext<AuthContextType | undefined>(und...
+         ╵       ~~~~~~~~~~~
+
+  The symbol "AuthContext" was originally declared here:
+
+    src/context/AuthContext.tsx:24:6:
+      24 │ const AuthContext = createContext<AuthContextType | null>(null);
+         ╵       ~~~~~~~~~~~
+
+
+✘ [ERROR] Multiple exports with the same name "AuthProvider"
+
+    src/context/AuthContext.tsx:85:13:
+      85 │ export const AuthProvider: React.FC<{ children: React.ReactNode }>...
+         ╵              ~~~~~~~~~~~~
+
+  The name "AuthProvider" was originally exported here:
+
+    src/context/AuthContext.tsx:26:13:
+      26 │ export const AuthProvider = ({ children }: { children: React.React...
+         ╵              ~~~~~~~~~~~~
+
+
+✘ [ERROR] The symbol "AuthProvider" has already been declared
+
+    src/context/AuthContext.tsx:85:13:
+      85 │ export const AuthProvider: React.FC<{ children: React.ReactNode }>...
+         ╵              ~~~~~~~~~~~~
+
+  The symbol "AuthProvider" was originally declared here:
+
+    src/context/AuthContext.tsx:26:13:
+      26 │ export const AuthProvider = ({ children }: { children: React.React...
+         ╵              ~~~~~~~~~~~~
+
+
+✘ [ERROR] Multiple exports with the same name "useAuth"
+
+    src/context/AuthContext.tsx:177:13:
+      177 │ export const useAuth = () => {
+          ╵              ~~~~~~~
+
+  The name "useAuth" was originally exported here:
+
+    src/context/AuthContext.tsx:75:13:
+      75 │ export const useAuth = () => {
+         ╵              ~~~~~~~
+
+
+✘ [ERROR] The symbol "useAuth" has already been declared
+
+    src/context/AuthContext.tsx:177:13:
+      177 │ export const useAuth = () => {
+          ╵              ~~~~~~~
+
+  The symbol "useAuth" was originally declared here:
+
+    src/context/AuthContext.tsx:75:13:
+      75 │ export const useAuth = () => {
+         ╵              ~~~~~~~
+
+
+    at failureErrorWithLog (/home/runner/workspace/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/workspace/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/runner/workspace/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/runner/workspace/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/workspace/node_modules/esbuild/lib/main.js:955:9
+    at new Promise (<anonymous>)
+    at requestCallbacks.on-end (/home/runner/workspace/node_modules/esbuild/lib/main.js:954:54)
+    at handleRequest (/home/runner/workspace/node_modules/esbuild/lib/main.js:647:17)
+    at handleIncomingPacket (/home/runner/workspace/node_modules/esbuild/lib/main.js:672:7)
+    at Socket.readFromStdout (/home/runner/workspace/node_modules/esbuild/lib/main.js:600:7)

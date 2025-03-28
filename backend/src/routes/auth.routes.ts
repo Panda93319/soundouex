@@ -5,6 +5,15 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
 import { db } from '../db';
+import { Request as ExpressRequest } from 'express';
+
+interface AuthRequest extends ExpressRequest {
+  user?: {
+    id: string;
+    email: string;
+    name?: string;
+  };
+}
 import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = express.Router();
@@ -64,7 +73,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/profile', authMiddleware, async (req, res) => {
   try {
-    const user = await db.query('SELECT id, name, email FROM users WHERE id = $1', [req.user.id]);
+    const user = await db.query('SELECT id, name, email FROM users WHERE id = $1', [(req as AuthRequest).user?.id]);
     res.json(user.rows[0]);
   } catch (error) {
     res.status(400).json({ message: 'Failed to get profile', error });

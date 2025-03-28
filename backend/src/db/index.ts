@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 import { config } from '../config';
 
-export const pool = new Pool({
+export const db = new Pool({
   host: config.db.host,
   port: config.db.port,
   database: config.db.database,
@@ -12,7 +12,7 @@ export const pool = new Pool({
 
 // Initialize database tables
 export const initDb = async () => {
-  const client = await pool.connect();
+  const client = await db.connect();
   try {
     await client.query(`
       CREATE TABLE IF NOT EXISTS users (

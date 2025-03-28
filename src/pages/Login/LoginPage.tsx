@@ -1,24 +1,17 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import ReCAPTCHA from "react-google-recaptcha";
 
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useAuth } from '@/context/AuthContext';
+import { Form } from '@/components/ui/form';
+import { AuthFormField } from '@/components/auth/FormField';
+import { login } from '@/services/authService';
+import { LOGIN_FIELDS } from '@/lib/authContants';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -28,7 +21,6 @@ const formSchema = z.object({
 });
 
 const LoginPage: React.FC = () => {
-  const { signIn } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
@@ -53,11 +45,11 @@ const LoginPage: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await signIn(values.email, values.password);
+      await login(values);
       toast.success("Successfully logged in!");
       navigate('/pass');
     } catch (error: any) {
-      toast.error(error.message || "Failed to log in. Please check your credentials and try again.");
+      toast.error(error.response?.data?.message || "Failed to log in. Please check your credentials and try again.");
     } finally {
       setIsLoading(false);
     }
@@ -76,52 +68,21 @@ const LoginPage: React.FC = () => {
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                        <Input 
-                          placeholder="your.email@example.com" 
-                          className="pl-10 bg-gray-800/50 border-gray-700 focus:border-purple-500" 
-                          {...field} 
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                        <Input 
-                          type="password" 
-                          placeholder="Enter your password" 
-                          className="pl-10 bg-gray-800/50 border-gray-700 focus:border-purple-500" 
-                          {...field} 
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {LOGIN_FIELDS.map((field) => (
+                <AuthFormField
+                  key={field.name}
+                  control={form.control}
+                  name={field.name}
+                  label={field.label}
+                  placeholder={field.placeholder}
+                  type={field.type}
+                  icon={field.icon}
+                />
+              ))}
 
               <div className="flex justify-center my-6">
                 <ReCAPTCHA
-                  sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // This is Google's test key
+                  sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
                   onChange={onCaptchaChange}
                   theme="dark"
                 />
@@ -153,5 +114,4 @@ const LoginPage: React.FC = () => {
     </div>
   );
 };
-
 export default LoginPage;

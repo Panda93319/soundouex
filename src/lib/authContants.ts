@@ -55,8 +55,36 @@ export const SIGNUP_FIELDS = [
     }
   ];
   
-  export const API_ENDPOINTS = {
-    SIGNUP: '/api/auth/signup',
-    VERIFY_EMAIL: '/api/auth/verify-email',
-    RESEND_VERIFICATION: '/api/auth/resend-verification'
-  };
+  export const LOGIN_FIELDS = [
+    {
+      name: 'email',
+      label: 'Email',
+      placeholder: 'your.email@example.com',
+      type: 'email',
+      icon: 'Mail',
+      validation: {
+        required: 'Email is required',
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: 'Invalid email address'
+        }
+      }
+    },
+    {
+      name: 'password',
+      label: 'Password',
+      placeholder: 'Enter your password',
+      type: 'password',
+      icon: 'Lock',
+      validation: {
+        required: 'Password is required'
+      }
+    }
+  ];
+// Add to existing API_ENDPOINTS
+export const API_ENDPOINTS = {
+  SIGNUP: '/api/auth/register',
+  LOGIN: '/api/auth/login',
+  VERIFY_EMAIL: '/api/auth/verify-email',
+  RESEND_VERIFICATION: '/api/auth/resend-verification'
+};

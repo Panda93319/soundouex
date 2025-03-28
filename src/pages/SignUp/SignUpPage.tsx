@@ -92,7 +92,7 @@ export const SignUpPage: React.FC = () => {
 
               <div className="flex justify-center my-6">
                 <ReCAPTCHA
-                  sitekey="YOUR_ACTUAL_RECAPTCHA_SITE_KEY"
+                  sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
                   onChange={onCaptchaChange}
                   theme="dark"
                 />

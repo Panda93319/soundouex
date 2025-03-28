@@ -10,10 +10,11 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://0.0.0.0:5000',
         changeOrigin: true,
       },
     },
+    allowedHosts: ['db0775a4-e2f1-42b7-9c63-df3368d75720-00-1nwek9rb7p5u1.spock.replit.dev', 'localhost'],
   },
   plugins: [
     react(),
